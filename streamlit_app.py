@@ -11,8 +11,7 @@ st.set_page_config(page_title="[청출어람] 재개발 수익율 계산기", la
 SECRET_PASSWORD = "0815" 
 
 # 숫자에 콤마를 넣고 빼는 변환 함수 정의
-def to_int(val_str):ㅇ
-    """쉼표가 포함된 문자열을 숫자로 변환"""
+def to_int(val_str):
     try:
         clean_str = val_str.replace(",", "").replace(" ", "")
         return int(clean_str) if clean_str else 0
@@ -20,7 +19,6 @@ def to_int(val_str):ㅇ
         return 0
 
 def fmt(val):
-    """숫자를 쉼표가 있는 문자열로 변환"""
     return f"{int(val):,}"
 
 # 항목 이름(1.2배)과 숫자(0.7배)의 크기를 맞춤 조절하여 출력하는 함수
@@ -202,7 +200,7 @@ st.markdown("---")
 
 
 # =========================================================================
-# 💾 [신규 추가] 오른쪽 맨 아래 버튼 2개 및 저장 목록 표 구현 영역
+# 💾 임장 매물 저장 장부 기능 구현 영역
 # =========================================================================
 st.markdown("### 🗂️ 임장 매물 저장 장부")
 
@@ -234,16 +232,12 @@ with btn_col1:
 # [버튼 2] 엑셀 파일 다운로드
 with btn_col2:
     if st.session_state["property_list"]:
-        # 리스트 데이터를 표(DataFrame)로 변환
         df = pd.DataFrame(st.session_state["property_list"])
-        
-        # 메모리 상에 엑셀 파일 생성
         excel_buffer = BytesIO()
         with pd.ExcelWriter(excel_buffer, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='재개발 매물 목록')
         excel_data = excel_buffer.getvalue()
         
-        # 스트림릿 다운로드 버튼 기능 연결
         st.download_button(
             label="📥 엑셀 파일 다운로드",
             data=excel_data,
@@ -252,22 +246,17 @@ with btn_col2:
             use_container_width=True
         )
     else:
-        # 저장된 데이터가 없을 때는 비활성화된 것처럼 보여주는 버튼 배치
         st.button("📥 엑셀 파일 다운로드", disabled=True, use_container_width=True, help="저장된 매물이 있어야 다운로드 가능합니다.")
 
 # 테이블 출력 공간
 if st.session_state["property_list"]:
-    # 화면용 표 만들기 (금액 가독성을 위해 천단위 쉼표 포맷팅 적용)
     display_df = pd.DataFrame(st.session_state["property_list"])
-    
-    # 숫자형 컬럼들만 골라서 쉼표 포맷 형식으로 변경 (출력용)
     format_cols = ["매매가(원)", "공주가(원)", "감평가(원)", "프리미엄(원)", "분담금(원)", "총 투자금액(원)", "최종 실투자금(원)", "예상 수익금(원)"]
     for col in format_cols:
         display_df[col] = display_df[col].map(lambda x: f"{int(x):,}")
         
     st.dataframe(display_df, use_container_width=True)
     
-    # 목록 비우기 단추 추가 (선택 사항)
     if st.button("🗑️ 장부 전체 초기화", size="small"):
         st.session_state["property_list"] = []
         st.rerun()
