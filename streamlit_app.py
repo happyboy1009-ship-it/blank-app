@@ -257,7 +257,7 @@ if st.session_state["property_list"]:
         
     st.dataframe(display_df, use_container_width=True)
     
-    if st.button("🗑️ 장부 전체 초기화", size="small"):
+    if st.button("🗑️ 장부 전체 초기화"):
         st.session_state["property_list"] = []
         st.rerun()
 else:
