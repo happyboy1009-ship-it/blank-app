@@ -11,7 +11,7 @@ st.set_page_config(page_title="[청출어람] 재개발 수익율 계산기", la
 SECRET_PASSWORD = "0815" 
 
 # 숫자에 콤마를 넣고 빼는 변환 함수 정의
-def to_int(val_str):
+def to_int(val_str):ㅇ
     """쉼표가 포함된 문자열을 숫자로 변환"""
     try:
         clean_str = val_str.replace(",", "").replace(" ", "")
