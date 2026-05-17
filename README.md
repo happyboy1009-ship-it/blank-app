@@ -17,3 +17,9 @@ A simple Streamlit app template for you to modify!
    ```
    $ streamlit run streamlit_app.py
    ```
+
+3. If you are running the app in a headless environment (no browser), you can use:
+
+   ```
+   $ streamlit run streamlit_app.py --server.headless true
+   ```
